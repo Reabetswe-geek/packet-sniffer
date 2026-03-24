@@ -19,6 +19,19 @@ This project is a custom packet sniffer building python and Scapy.
 - Timestamped loggin
 - Graceful shutdown (CTRL+C)
 
+## Advanced Usage
+- Run with filters:
+python packet-sniffer.py -- filter tcp
+
+- Detect suspicious IP:
+Pythin packet-sniffer.py --ip
+
+- Limited packet capture:
+python packet-sniffer by --count 20
+
+- combine options:
+python-packet-sniffer.py --filter tcp --ip --count
+
 # Tools Used
 - Python
 - Scapy

@@ -9,6 +9,9 @@ This project is a custom packet sniffer building python and Scapy.
 - Displays source and destination IPs
 - Detects TCP, UDP, and ICMP protocols
 - Flags unusual TCP ports
+- Logs captured packets to file
+- Detects unusual TCP ports
+- Supports packet filtering
 
 # Tools Used
 - Python

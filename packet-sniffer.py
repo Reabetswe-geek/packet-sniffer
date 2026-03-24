@@ -1,5 +1,7 @@
 from scapy.all import sniff, IP, TCP, UDP, ICMP
 
+suspicious_ips = ["185.125.190.57"]
+
 def process_packet(packet):
     if packet.haslayer(IP):
         ip = packet[IP]
@@ -7,6 +9,8 @@ def process_packet(packet):
         dst = ip.dst
 
         log = f"[+] {src} -> {dst}"
+
+        if src in suspicious_ips or dst in suspicious_ips: log += " | ALERT: Suspicious IP detected!"
 
         if packet.haslayer(TCP):
             tcp_layer = packet[TCP]
@@ -24,8 +28,8 @@ def process_packet(packet):
 
         print(log)
 
-        with open("sniffer_log.txt", "a") as file: file.write(log + "\n")
+        with open("sniffer_log.txt" ,"a") as file: file.write(log + "\n")
 
-print("Starting packet sniffer with loggin...\n")
+print("Starting packet sniffer with alerts...\n")
 
-sniff(prn=process_packet, count=30)
+sniff(prn=process_packet, count=50)

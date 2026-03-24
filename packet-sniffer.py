@@ -1,4 +1,5 @@
 from scapy.all import sniff, IP, TCP, UDP, ICMP
+from datetime import datetime
 
 suspicious_ips = ["185.125.190.57"]
 
@@ -8,9 +9,11 @@ def process_packet(packet):
         src = ip.src
         dst = ip.dst
 
-        log = f"[+] {src} -> {dst}"
+        timestamp = datetime.now().strftime("H:%M:%S")
 
-        if src in suspicious_ips or dst in suspicious_ips: log += " | ALERT: Suspicious IP detected!"
+        log = f"[{timestamp}] {src} -> {dst}"
+
+        if src in suspicious_ips or dst in suspicious_ips: log += " | ALERT: Suspicious IP"
 
         if packet.haslayer(TCP):
             tcp_layer = packet[TCP]
@@ -24,12 +27,17 @@ def process_packet(packet):
             log += f" | UDP Port: {udp.dport}"
 
         elif packet.haslayer(ICMP):
-            log += " | ICMP Traffic"
+            log += " | ICMP"
 
         print(log)
 
-        with open("sniffer_log.txt" ,"a") as file: file.write(log + "\n")
+        with open("sniffer_log.txt" ,"a") as f: f.write(log + "\n")
 
-print("Starting packet sniffer with alerts...\n")
+print("=" * 50)
+print("    Packet Sniffer Started (Press Ctrl+C to stop)")
+print("=" * 50)
 
-sniff(prn=process_packet, count=50)
+try: 
+    sniff(prn=process_packet, store=False)
+except KeyboardInterrupt:
+     print("\n\n[!] Sniffer stopped  by user")
